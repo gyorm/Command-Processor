@@ -17,6 +17,7 @@ class CommandProcessor{
     public:
         CommandProcessor();
         ~CommandProcessor();
+        //asd
 };
 
 #endif
