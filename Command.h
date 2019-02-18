@@ -11,20 +11,16 @@
 class Command{
     public:
         Command();
+        Command(char *cmdText, char *helpStr, char *defParams);
         ~Command();
-
+        char *ToString();
     private:
-        char *CmdText;
-        char *HelptStr;
-        char *CommandText;
-        char *DefaultParams;
-        char *UserParams;
+        char CommandText[20];
+        char HelpStr[100];
+        char DefaultParams[20];
+        char UserParams[20];
 
-        LinkedList<char*> DefaultParamList;
-        LinkedList<char*> UserParamList;
-        
-        void(*CmdFunction)();
-
+        // Így most működni látszik, ki kell bővíteni...
 };
 
 #endif
