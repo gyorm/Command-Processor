@@ -8,6 +8,8 @@
 Command cmd("CMD", "CMDHELP", "1,1");
 Command cmd2("CMD2", "CMD2 Help", "0,2");
 
+CommandProcessor cmdp;
+
 LinkedList<Command> *cmdList = new LinkedList<Command>();
 Node<Command> *curr = new Node<Command>();
 
@@ -15,17 +17,13 @@ void setup(){
     pinMode(LED_BUILTIN, OUTPUT);
     Serial.begin(115200);
 
-    cmdList->Add(cmd);
-    cmdList->Add(cmd2);
-
-    curr = cmdList->head;
+    cmdp.AddCommand(cmd);
+    cmdp.AddCommand(cmd2);
 }
 
 void loop(){
-    Serial.print("\n\nObejct.ToString() --> ");
-    Serial.print(curr->data.ToString());
-    if(curr ->next == nullptr) curr = cmdList->head;
-    else curr = curr->next;
+    Serial.print("\n\nCommand List:\n");
+    cmdp.ListCommands();
     Blink();
 }
 

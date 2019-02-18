@@ -11,11 +11,17 @@ CommandProcessor::~CommandProcessor(){
 void CommandProcessor::ListCommands(){
     if(CommandList->head == nullptr){
         Serial.print("\n ERROR: CommandList is empty!");
+        return;
     }
     Node<Command> *currNode = CommandList->head;
+    int cmdCount = 1;
     while(currNode != nullptr){
-        //Serial.print(currNode->data.toString());
+        Serial.print("\ncmd");
+        Serial.print(cmdCount, DEC);
+        Serial.print(":");
+        Serial.print(currNode->data.ToString());
         currNode = currNode->next;
+        cmdCount++;
     }
 }
 

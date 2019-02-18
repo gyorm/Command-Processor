@@ -21,6 +21,6 @@ char* Command::ToString(){
     strcat(CmdDesc, CommandText);
     strcat(CmdDesc, "\nCommand Help: ");
     strcat(CmdDesc, HelpStr);
-
+    strcat(CmdDesc, "\n");
     return CmdDesc;
 }
