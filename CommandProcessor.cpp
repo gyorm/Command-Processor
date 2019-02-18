@@ -15,6 +15,7 @@ void CommandProcessor::ListCommands(){
     }
     Node<Command> *currNode = CommandList->head;
     int cmdCount = 1;
+    Serial.print("\n\nCommand List:\n");
     while(currNode != nullptr){
         Serial.print("\ncmd");
         Serial.print(cmdCount, DEC);

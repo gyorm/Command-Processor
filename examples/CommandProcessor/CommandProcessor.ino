@@ -10,9 +10,6 @@ Command cmd2("CMD2", "CMD2 Help", "0,2");
 
 CommandProcessor cmdp;
 
-LinkedList<Command> *cmdList = new LinkedList<Command>();
-Node<Command> *curr = new Node<Command>();
-
 void setup(){
     pinMode(LED_BUILTIN, OUTPUT);
     Serial.begin(115200);
@@ -22,7 +19,6 @@ void setup(){
 }
 
 void loop(){
-    Serial.print("\n\nCommand List:\n");
     cmdp.ListCommands();
     Blink();
 }
