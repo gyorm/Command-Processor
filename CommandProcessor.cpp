@@ -2,6 +2,15 @@
 
 CommandProcessor::CommandProcessor(){
     CommandList = new LinkedList<Command>();
+    for(int i = 0; i < COMMAND_COUNT; i++){
+        Command newCmd(
+            Commands[i].CommandText,
+            Commands[i].CmdFunction,
+        	Commands[i].DefaultParameters,
+        	Commands[i].HelpText
+        );
+        CommandList->Add(newCmd);
+    }
 }
 
 CommandProcessor::~CommandProcessor(){
@@ -26,6 +35,35 @@ void CommandProcessor::ListCommands(){
     }
 }
 
-bool CommandProcessor::AddCommand(Command command){
-    CommandList->Add(command);
+char *upperCase(char *str){
+	int i = 0;
+	while(str[i] != '\0'){
+		toupper(str[i]);
+		i++;
+	}
+	
+}
+
+bool isHelp(char *Command){
+	if(strcmp(upperCase(Command), "HELP") == 0) return true;
+	else return false;
+}
+
+bool CommandProcessor::Process(char *Command){
+	if(isHelp(Command)){
+		CommandList->Get(0)->data.Execute(); //->Get(0).Execute() lenne jó --> LinkedList.h
+	}
+}
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+//::::::::::::::::::::::::::::::CmdFunctions::::::::::::::::::::::::::::::
+
+//::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+void Port(){
+
+}
+
+void GeneralHelp(){
+
 }

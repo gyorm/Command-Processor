@@ -5,17 +5,12 @@
 
 #include "CommandProcessor.h"
 
-Command cmd("CMD", "CMDHELP", "1,1");
-Command cmd2("CMD2", "CMD2 Help", "0,2");
-
 CommandProcessor cmdp;
 
 void setup(){
     pinMode(LED_BUILTIN, OUTPUT);
     Serial.begin(115200);
 
-    cmdp.AddCommand(cmd);
-    cmdp.AddCommand(cmd2);
 }
 
 void loop(){
