@@ -2,6 +2,7 @@
 
 CommandProcessor::CommandProcessor(){
     CommandList = new LinkedList<Command>();
+    incomingCmdPos = 0;
     for(int i = 0; i < COMMAND_COUNT; i++){
         Command newCmd(
             Commands[i].CommandText,
@@ -35,13 +36,13 @@ void CommandProcessor::ListCommands(){
     }
 }
 
-char *upperCase(char *str){
+bool upperCase(char *str){
 	int i = 0;
 	while(str[i] != '\0'){
 		toupper(str[i]);
 		i++;
 	}
-	
+    return true;
 }
 
 bool isHelp(char *Command){
@@ -51,8 +52,30 @@ bool isHelp(char *Command){
 
 bool CommandProcessor::Process(char *Command){
 	if(isHelp(Command)){
-		CommandList->Get(0)->data.Execute(); //->Get(0).Execute() lenne jó --> LinkedList.h
+		CommandList->Get(0)->Execute();
 	}
+}
+
+void CommandProcessor::error(){
+
+}
+
+void CommandProcessor::Run(){
+    if(Serial.available()){
+        char buff = Serial.read();
+        if(buff != '\r'){
+            incomingCommand[incomingCmdPos] = buff;
+            incomingCmdPos++;
+        }
+        else
+        {
+            incomingCommand[incomingCmdPos] = '\0';
+            incomingCmdPos = 0;
+            if(!Process(incomingCommand)) error();
+            memset(incomingCommand, 0, 50);
+        }
+        
+    }
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
