@@ -24,40 +24,65 @@ void CommandProcessor::ListCommands(){
         return;
     }
     Node<Command> *currNode = CommandList->head;
-    int cmdCount = 1;
-    Serial.print("\n\nCommand List:\n");
+    Serial.print("\nAvailable Commands:\n");
     while(currNode != nullptr){
-        Serial.print("\ncmd");
-        Serial.print(cmdCount, DEC);
-        Serial.print(":");
         Serial.print(currNode->data.ToString());
         currNode = currNode->next;
-        cmdCount++;
     }
 }
 
-bool upperCase(char *str){
-	int i = 0;
+bool CommandProcessor::upperCase(char *str){
+    int i = 0;
 	while(str[i] != '\0'){
-		toupper(str[i]);
+		char c = toupper(str[i]);
+		str[i] = c;
 		i++;
 	}
     return true;
 }
 
-bool isHelp(char *Command){
-	if(strcmp(upperCase(Command), "HELP") == 0) return true;
+Command *CommandProcessor::getCommandByName(char *cmdName){
+	Node<Command> *currNode = CommandList->head;
+	while(currNode != nullptr){
+		if(strcmp(currNode->data.GetName(), cmdName) == 0)
+			return &currNode->data;
+		else currNode = currNode->next;
+	}
+	Serial.print("\ngetCommandByName(): failed");
+	return nullptr;
+}
+
+bool CommandProcessor::isHelp(char *Command){
+    upperCase(Command);
+	if(strcmp(Command, "HELP") == 0) return true;
 	else return false;
 }
 
-bool CommandProcessor::Process(char *Command){
-	if(isHelp(Command)){
-		CommandList->Get(0)->Execute();
+bool CommandProcessor::Process(char *CmdString){
+    upperCase(CmdString);
+    if(hasParams(CmdString)){
+        //split the command text from command params...
+    }
+    else
+        strcpy(cmdText, CmdString);
+    
+	Command *cmd = getCommandByName(cmdText);
+	if(cmd != nullptr)
+	{
+        if(isHelp(cmdText)){
+            GeneralHelp(this);
+            return true;
+        }
+        else{
+            cmd->Execute();
+    	    return true;
+        }
 	}
+    return false;
 }
 
 void CommandProcessor::error(){
-
+    Serial.print("\nERROR");
 }
 
 void CommandProcessor::Run(){
@@ -74,19 +99,31 @@ void CommandProcessor::Run(){
             if(!Process(incomingCommand)) error();
             memset(incomingCommand, 0, 50);
         }
-        
     }
+}
+
+bool CommandProcessor::hasParams(char *cmdString){
+    int i = 0;
+    while(cmdString[i] != '\0'){
+        if(cmdString[i] == '=') return true;
+        i++;
+    }
+    return false;
+}
+
+void CommandProcessor::splitCmdString(char *cmdString){
+
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-//::::::::::::::::::::::::::::::CmdFunctions::::::::::::::::::::::::::::::
+//:::::::::::::::::::::::Definition of CmdFunctions:::::::::::::::::::::::
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
 void Port(){
-
+    Serial.print("\nPORT\n");
 }
 
-void GeneralHelp(){
-
+void GeneralHelp(CommandProcessor *cmdp){
+	cmdp->ListCommands();
 }

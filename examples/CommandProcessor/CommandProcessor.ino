@@ -9,13 +9,20 @@ CommandProcessor cmdp;
 
 void setup(){
     pinMode(LED_BUILTIN, OUTPUT);
+    pinMode(28, OUTPUT);
     Serial.begin(115200);
-
+    //Blink 5 Times:
+    for(int i = 0; i < 5; i++)
+        Blink();
+    //Light up led:
+    digitalWrite(LED_BUILTIN, LOW);
+    digitalWrite(28, HIGH);
+    Serial.print("\nCommandProcessor started!\n");
 }
 
 void loop(){
-    cmdp.ListCommands();
-    Blink();
+    cmdp.Run();
+    //Blink();
 }
 
 void Blink(){

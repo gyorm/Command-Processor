@@ -13,6 +13,8 @@ class Command{
         Command();
         Command(char *cmdText, void (*funPtr)(), char *defParams, char *helpStr);
         ~Command();
+        char *GetName();
+
         char *ToString();
         void Execute();
     private:

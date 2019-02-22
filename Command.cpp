@@ -16,15 +16,12 @@ Command::~Command(){
     
 }
 
+char *Command::GetName(){
+    return CommandText;
+}
+
 char* Command::ToString(){
-    char CmdDesc[200];
-    CmdDesc[0] = '\0';
-    strcat(CmdDesc, "\nCommand Name: ");
-    strcat(CmdDesc, CommandText);
-    strcat(CmdDesc, "\nCommand Help: ");
-    strcat(CmdDesc, HelpStr);
-    strcat(CmdDesc, "\n");
-    return CmdDesc;
+    return HelpStr;
 }
 
 void Command::Execute(){

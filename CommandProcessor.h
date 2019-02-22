@@ -9,7 +9,11 @@
     #define COMMANDPROCESSOR_h
 	#define COMMAND_COUNT 2
 
-void GeneralHelp();
+typedef class CommandProcessor;
+
+//Declare Command functions here:
+
+void GeneralHelp(CommandProcessor *cmdp);
 void Port();
 
 class CommandProcessor{
@@ -39,12 +43,28 @@ class CommandProcessor{
         void ListCommands();
         /**
          * Processes a given CommandString, determining its command
-         * type, if it has paremeters, if it has enough parameters,
-         * if it is a valid command in the first place. Executes the
-         * command if it can be executed.
+         * type, if it has paremeters, if it is a valid command in the 
+         * first place. Executes the command if it can be executed.
         */
 		bool Process(char *Command);
     private:
+        /**
+         * Searches for an '=' character in the cmdString. If it contains
+         * '=' character, it means it has some parameters. Then it returns
+         * true, else it returns false.
+        */
+        bool hasParams(char *cmdString);
+        /**
+         * Splits The command name, from the command parameters. They are
+         * separated by an '=' character.
+        */
+        void splitCmdString(char *cmdString);
+        /**
+         * Loops through the Commandlist, and finds the command named 
+         * int the parameter cmdName. returns the Command object if 
+         * it exists, nullptr if it doesn't.
+        */
+        Command *getCommandByName(char *cmdName);
         /**
          * Determines if the command is the "HELP" string. Returns true
          * if it is.
@@ -59,6 +79,12 @@ class CommandProcessor{
          * Prints an error message to the Serial port.
         */
 		void error();
+
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+
+        //:::::::::::::::::::::::::::Variables::::::::::::::::::::::::::::
+
+        //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
         /**
          * Linked list containing all the Commands the processor can
@@ -79,9 +105,10 @@ class CommandProcessor{
          * Table containing all the Commands. Add own commands here,
          * after incrementing COMMAND_COUNT. Command functions must be
          * pre-declared in this header, and defined in CommandProcessor.cpp
+         * Commands should allways be UPPERCASE!
         */
 		struct ExtCmd Commands[COMMAND_COUNT]{
-            {"HELP",		GeneralHelp,		nullptr,	    "\nHELP -> List all the commands with their respective parameters"},
+            {"HELP",		nullptr,		nullptr,	    "\nHELP -> List all the commands with their respective parameters"},
             {"PORT",		Port,   	    	"12,1",		    "\nPORT=a,b -> Set Pin to high, or low - a: PIN number, b: Value"}
         };
         /**
@@ -93,6 +120,15 @@ class CommandProcessor{
          * in order to record the incoming characters in the proper order.
         */
         int incomingCmdPos;
+        /**
+         * String containing the command text.
+        */
+        char cmdText[20];
+        /**
+         * String containing command parameters, can be passed down for processing
+         * to Command().
+        */
+        char cmdParams[10];
 };
 
 #endif
