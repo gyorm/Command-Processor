@@ -31,31 +31,25 @@ void CommandProcessor::ListCommands(){
     }
 }
 
-bool CommandProcessor::upperCase(char *str){
-    int i = 0;
-	while(str[i] != '\0'){
-		char c = toupper(str[i]);
-		str[i] = c;
-		i++;
-	}
-    return true;
+void CommandProcessor::error(){
+    Serial.print("\nERROR");
 }
 
-Command *CommandProcessor::getCommandByName(char *cmdName){
-	Node<Command> *currNode = CommandList->head;
-	while(currNode != nullptr){
-		if(strcmp(currNode->data.GetName(), cmdName) == 0)
-			return &currNode->data;
-		else currNode = currNode->next;
-	}
-	Serial.print("\ngetCommandByName(): failed");
-	return nullptr;
-}
-
-bool CommandProcessor::isHelp(char *Command){
-    upperCase(Command);
-	if(strcmp(Command, "HELP") == 0) return true;
-	else return false;
+void CommandProcessor::Run(){
+    if(Serial.available()){
+        char buff = Serial.read();
+        if(buff != '\r'){
+            incomingCommand[incomingCmdPos] = buff;
+            incomingCmdPos++;
+        }
+        else
+        {
+            incomingCommand[incomingCmdPos] = '\0';
+            incomingCmdPos = 0;
+            if(!Process(incomingCommand)) error();
+            memset(incomingCommand, 0, 50);
+        }
+    }
 }
 
 bool CommandProcessor::Process(char *CmdString){
@@ -81,25 +75,15 @@ bool CommandProcessor::Process(char *CmdString){
     return false;
 }
 
-void CommandProcessor::error(){
-    Serial.print("\nERROR");
-}
-
-void CommandProcessor::Run(){
-    if(Serial.available()){
-        char buff = Serial.read();
-        if(buff != '\r'){
-            incomingCommand[incomingCmdPos] = buff;
-            incomingCmdPos++;
-        }
-        else
-        {
-            incomingCommand[incomingCmdPos] = '\0';
-            incomingCmdPos = 0;
-            if(!Process(incomingCommand)) error();
-            memset(incomingCommand, 0, 50);
-        }
-    }
+Command *CommandProcessor::getCommandByName(char *cmdName){
+	Node<Command> *currNode = CommandList->head;
+	while(currNode != nullptr){
+		if(strcmp(currNode->data.GetName(), cmdName) == 0)
+			return &currNode->data;
+		else currNode = currNode->next;
+	}
+	Serial.print("\ngetCommandByName(): failed");
+	return nullptr;
 }
 
 bool CommandProcessor::hasParams(char *cmdString){
@@ -111,8 +95,28 @@ bool CommandProcessor::hasParams(char *cmdString){
     return false;
 }
 
-void CommandProcessor::splitCmdString(char *cmdString){
+bool CommandProcessor::upperCase(char *str){
+    int i = 0;
+	while(str[i] != '\0'){
+		char c = toupper(str[i]);
+		str[i] = c;
+		i++;
+	}
+    return true;
+}
 
+bool CommandProcessor::isHelp(char *Command){
+    upperCase(Command);
+	if(strcmp(Command, "HELP") == 0) return true;
+	else return false;
+}
+
+void CommandProcessor::splitCmdString(char *cmdString){
+    int i = 0;
+    while(cmdString[i] != '\0'){
+        
+    }
+    
 }
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
@@ -120,8 +124,13 @@ void CommandProcessor::splitCmdString(char *cmdString){
 
 //::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 
-void Port(){
-    Serial.print("\nPORT\n");
+void Port(int pin, int pinVal){
+    
+    pinVal >= 1 ? pinVal = 1 : pinVal = 0;
+    pinVal <= 0 ? pinVal = 0 : pinVal = 1;
+
+    pinMode(pin, OUTPUT);
+    digitalWrite(pin, pinVal);
 }
 
 void GeneralHelp(CommandProcessor *cmdp){

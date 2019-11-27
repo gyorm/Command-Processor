@@ -14,7 +14,7 @@ typedef class CommandProcessor;
 //Declare Command functions here:
 
 void GeneralHelp(CommandProcessor *cmdp);
-void Port();
+void Port(int pin, int pinVal);
 
 class CommandProcessor{
     public:
@@ -46,7 +46,7 @@ class CommandProcessor{
          * type, if it has paremeters, if it is a valid command in the 
          * first place. Executes the command if it can be executed.
         */
-		bool Process(char *Command);
+        bool Process(char *Command);
     private:
         /**
          * Searches for an '=' character in the cmdString. If it contains
@@ -109,7 +109,7 @@ class CommandProcessor{
         */
 		struct ExtCmd Commands[COMMAND_COUNT]{
             {"HELP",		nullptr,		nullptr,	    "\nHELP -> List all the commands with their respective parameters"},
-            {"PORT",		Port,   	    	"12,1",		    "\nPORT=a,b -> Set Pin to high, or low - a: PIN number, b: Value"}
+            {"PORT",		Port(),   	    	"12,1",		    "\nPORT=a,b -> Set Pin to high, or low - a: PIN number, b: Value"}
         };
         /**
          * Buffer string to record incoming commands on Serial port.

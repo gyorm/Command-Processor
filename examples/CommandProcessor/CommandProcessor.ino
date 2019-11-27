@@ -22,7 +22,6 @@ void setup(){
 
 void loop(){
     cmdp.Run();
-    //Blink();
 }
 
 void Blink(){

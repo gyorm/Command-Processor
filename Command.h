@@ -14,7 +14,6 @@ class Command{
         Command(char *cmdText, void (*funPtr)(), char *defParams, char *helpStr);
         ~Command();
         char *GetName();
-
         char *ToString();
         void Execute();
     private:
@@ -22,6 +21,7 @@ class Command{
         char HelpStr[100];
         char DefaultParams[20];
         char UserParams[20];
+        int i;
         void (*CmdFunction)();
 
         // Így most működni látszik, ki kell bővíteni...
